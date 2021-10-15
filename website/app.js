@@ -1,4 +1,5 @@
 /* Global Variables */
+  const apiKey = '5b8af0e7b31155bf7ea66f6337471862'
 
 // Create a new date instance dynamically with JS
 let d = new Date()
@@ -6,9 +7,10 @@ let newDate = d.getMonth() + 1 + '.' + d.getDate() + '.' + d.getFullYear()
 
 // Event listener to add function to existing HTML DOM element
 const generate = document.getElementById('generate')
-generate.addEventListener('click', async () => {
+generate.addEventListener('click', updateUI)
+async function updateUI(){
   try {
-    const temp = await getData()
+    const temp = await getData(apiKey)
     await saveProjectData(newDate, temp)
     const finalData = await getProjectData()
     document.getElementById('date').innerHTML = `the date is ${finalData.date}`
@@ -21,11 +23,10 @@ generate.addEventListener('click', async () => {
   } catch (error) {
     console.log('ERROR', error)
   }
-})
+}
 
 /* Function called by event listener */
-async function getData() {
-  const apiKey = '5b8af0e7b31155bf7ea66f6337471862'
+async function getData(apiKey) {
   const zipCode = document.getElementById('zip').value
   const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=${apiKey}&units=metric`
   const response = await fetch(url)
